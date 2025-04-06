@@ -8,6 +8,9 @@ const App = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [user, setUser] = useState(null)
+  const [title, setTitle] = useState("")
+  const [author, setAuthor] = useState("")
+  const [url, setURL] = useState("")
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -20,6 +23,7 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
+      blogService.setToken(user.token)
     }
   }, [])
 
@@ -34,6 +38,8 @@ const App = () => {
       window.localStorage.setItem(
         "loggedBlogappUser", JSON.stringify(user)
       )
+
+      blogService.setToken(user.token)
 
       setUser(user)
       setUsername("")
@@ -68,9 +74,40 @@ const App = () => {
     </div>
   )
 
+  const blogForm = () => (
+    <div>
+      <h2>Add blog</h2>
+      <form onSubmit={addBlog}>
+        <p>Title: <input type={"text"} value={title} name={"Title"} onChange={({ target }) => setTitle(target.value)} /></p>
+        <p>Author: <input type={"text"} value={author} name={"Author"} onChange={({ target }) => setAuthor(target.value)} /></p>
+        <p>URL: <input type={"text"} value={url} name={"URL"} onChange={({ target }) => setURL(target.value)} /></p>
+        <button type='submit'>Create</button>
+      </form>
+    </div>
+  )
+
+  const addBlog = (event) => {
+    event.preventDefault()
+    const blogObject = {
+      title: title,
+      author: author,
+      url: url
+    }
+
+    blogService
+      .create(blogObject)
+        .then(returnedBlog => {
+          setBlogs(blogs.concat(returnedBlog))
+          setTitle("")
+          setAuthor("")
+          setURL("")
+        })
+      
+  }
+
   return (
     <div>
-      {user === null ? loginForm() : blogDisplay()}
+      {user === null ? loginForm() : <div>{blogDisplay()} {blogForm()}</div>}
     </div>
   )
 }
