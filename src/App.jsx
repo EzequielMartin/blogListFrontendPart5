@@ -3,6 +3,21 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from "./services/login"
 
+const Notification = (props) => {
+  if (props.error === null && props.success === null) {
+    return null
+  }else if (props.error !== null && props.success === null){
+    return (
+      <div>{props.error}</div>
+    )
+  }else if (props.error === null && props.success !== null){
+    return (
+      <div>{props.success}</div>
+    )
+  }
+  // return(<p>HOLA</p>)
+}
+
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState("")
@@ -11,6 +26,8 @@ const App = () => {
   const [title, setTitle] = useState("")
   const [author, setAuthor] = useState("")
   const [url, setURL] = useState("")
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [successMessage, setSuccessMessage] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -45,7 +62,11 @@ const App = () => {
       setUsername("")
       setPassword("")
     } catch (exception) {
-      alert("wrong credentials")
+      setErrorMessage("Wrong credentials")
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+      // alert("wrong credentials")
     }
   }
 
@@ -101,12 +122,17 @@ const App = () => {
           setTitle("")
           setAuthor("")
           setURL("")
+          setSuccessMessage("Blog created")
+          setTimeout(() => {
+            setSuccessMessage(null)
+          }, 5000)
         })
       
   }
 
   return (
     <div>
+      <Notification error={errorMessage} success={successMessage} />
       {user === null ? loginForm() : <div>{blogDisplay()} {blogForm()}</div>}
     </div>
   )
