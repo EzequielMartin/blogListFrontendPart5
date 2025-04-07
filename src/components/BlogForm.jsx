@@ -5,17 +5,17 @@ const BlogForm = ({ createBlog }) => {
   const [author, setAuthor] = useState("")
   const [url, setURL] = useState("")
 
-  const addBlog = (event) =>{
-  event.preventDefault()
-      createBlog({
-        title: title,
-        author: author,
-        url: url,
-        likes: 0
-      })
-      setTitle("")
-      setAuthor("")
-      setURL("")
+  const addBlog = (event) => {
+    event.preventDefault()
+    createBlog({
+      title: title,
+      author: author,
+      url: url,
+      likes: 0
+    })
+    setTitle("")
+    setAuthor("")
+    setURL("")
   }
 
   return (
@@ -28,6 +28,6 @@ const BlogForm = ({ createBlog }) => {
         <button type='submit'>Create</button>
       </form>
     </div>
-)}
+  )}
 
 export default BlogForm

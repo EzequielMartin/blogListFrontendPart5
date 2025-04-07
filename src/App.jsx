@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react'
-import Blog from './components/Blog'
-import blogService from './services/blogs'
+import { useState, useEffect } from "react"
+import Blog from "./components/Blog"
+import blogService from "./services/blogs"
 import loginService from "./services/login"
-import LoginForm from './components/LoginForm'
-import BlogForm from './components/BlogForm'
-import Toggleable from './components/Toggleable'
+import LoginForm from "./components/LoginForm"
+import BlogForm from "./components/BlogForm"
+import Toggleable from "./components/Toggleable"
 
 const Notification = (props) => {
   if (props.error === null && props.success === null) {
@@ -86,14 +86,14 @@ const App = () => {
     const sortedBlogs = blogs.sort((a,b) => (b.likes - a.likes))
 
     return(
-    <div>
-      <h2>Blogs</h2>
-      <p>{user.name} logged-in</p>
-      {sortedBlogs.map(blog =>
-        <Blog key={blog.id} blog={blog} increaseLikes={() => increaseLikes(blog.id)} removeBlog={() => removeBlog(blog.id)} userId={user.id} />
-      )}
-    </div>
-  )}
+      <div>
+        <h2>Blogs</h2>
+        <p>{user.name} logged-in</p>
+        {sortedBlogs.map(blog =>
+          <Blog key={blog.id} blog={blog} increaseLikes={() => increaseLikes(blog.id)} removeBlog={() => removeBlog(blog.id)} userId={user.id} />
+        )}
+      </div>
+    )}
 
   const blogForm = () => (
     <Toggleable buttonLabel="New blog">
@@ -105,21 +105,20 @@ const App = () => {
 
     blogService
       .create(blogObject)
-        .then(returnedBlog => {
-          setBlogs(blogs.concat(returnedBlog))
-          setSuccessMessage("Blog created")
-          setTimeout(() => {
-            setSuccessMessage(null)
-          }, 5000)
-        })
-      
+      .then(returnedBlog => {
+        setBlogs(blogs.concat(returnedBlog))
+        setSuccessMessage("Blog created")
+        setTimeout(() => {
+          setSuccessMessage(null)
+        }, 5000)
+      })
   }
 
   const increaseLikes = id => {
     const blog = blogs.find(b => b.id === id)
     const updatedLikes = blog.likes + 1
-    const updatedBlog = {...blog, likes: updatedLikes}
-    
+    const updatedBlog = { ...blog, likes: updatedLikes }
+
     blogService
       .update(id, updatedBlog)
       .then(returnedBlog => {
