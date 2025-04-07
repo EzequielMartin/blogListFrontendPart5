@@ -5,7 +5,6 @@ import loginService from "./services/login"
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Toggleable from './components/Toggleable'
-import usersService from "./services/users"
 
 const Notification = (props) => {
   if (props.error === null && props.success === null) {
@@ -28,18 +27,11 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
-  const [users, setUsers] = useState([])
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     )
-  }, [])
-
-  useEffect(() => {
-    usersService.getAll().then(users => {
-      setUsers(users)
-    }) 
   }, [])
 
   useEffect(() => {
@@ -98,7 +90,7 @@ const App = () => {
       <h2>Blogs</h2>
       <p>{user.name} logged-in</p>
       {sortedBlogs.map(blog =>
-        <Blog key={blog.id} blog={blog} increaseLikes={() => increaseLikes(blog.id)} removeBlog={() => removeBlog(blog.id)} />
+        <Blog key={blog.id} blog={blog} increaseLikes={() => increaseLikes(blog.id)} removeBlog={() => removeBlog(blog.id)} userId={user.id} />
       )}
     </div>
   )}
