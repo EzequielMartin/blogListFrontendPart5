@@ -26,9 +26,6 @@ const App = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [user, setUser] = useState(null)
-  const [title, setTitle] = useState("")
-  const [author, setAuthor] = useState("")
-  const [url, setURL] = useState("")
   const [errorMessage, setErrorMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
 
@@ -98,33 +95,16 @@ const App = () => {
 
   const blogForm = () => (
     <Toggleable buttonLabel="New blog">
-      <BlogForm
-        onSubmit={addBlog}
-        title={title}
-        author={author}
-        url={url}
-        handleTitleChange={({ target }) => setTitle(target.value)}
-        handleAuthorChange={({ target }) => setAuthor(target.value)}
-        handleURLChange={({ target }) => setURL(target.value)}
-      />
+      <BlogForm createBlog={addBlog} />
     </Toggleable>
   )
 
-  const addBlog = (event) => {
-    event.preventDefault()
-    const blogObject = {
-      title: title,
-      author: author,
-      url: url
-    }
+  const addBlog = (blogObject) => {
 
     blogService
       .create(blogObject)
         .then(returnedBlog => {
           setBlogs(blogs.concat(returnedBlog))
-          setTitle("")
-          setAuthor("")
-          setURL("")
           setSuccessMessage("Blog created")
           setTimeout(() => {
             setSuccessMessage(null)
