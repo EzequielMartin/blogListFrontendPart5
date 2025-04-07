@@ -22,10 +22,15 @@ const update = async (id, newObject) => {
   return request.data
 }
 
+const remove = async (id) => {
+  const request = await axios.delete(`${baseUrl}/${id}`)
+  return request.data
+}
+
 let token = null
 
 const setToken = newToken => {
   token = `Bearer ${newToken}`
 }
 
-export default { getAll, create, setToken, update }
+export default { getAll, create, setToken, update, remove }

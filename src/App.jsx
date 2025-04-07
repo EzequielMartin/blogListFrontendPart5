@@ -83,15 +83,18 @@ const App = () => {
     </Toggleable>
   )
 
-  const blogDisplay = () => (
+  const blogDisplay = () => {
+    const sortedBlogs = blogs.sort((a,b) => (b.likes - a.likes))
+
+    return(
     <div>
       <h2>Blogs</h2>
       <p>{user.name} logged-in</p>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} increaseLikes={() => increaseLikes(blog.id)} />
+      {sortedBlogs.map(blog =>
+        <Blog key={blog.id} blog={blog} increaseLikes={() => increaseLikes(blog.id)} removeBlog={() => removeBlog(blog.id)} />
       )}
     </div>
-  )
+  )}
 
   const blogForm = () => (
     <Toggleable buttonLabel="New blog">
@@ -121,8 +124,15 @@ const App = () => {
     blogService
       .update(id, updatedBlog)
       .then(returnedBlog => {
-      setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog))
-    })
+        setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog))
+      })
+  }
+
+  const removeBlog = id => {
+    blogService
+      .remove(id)
+      .then(
+        setBlogs(blogs.filter(blog => blog.id !== id)))
   }
 
   return (

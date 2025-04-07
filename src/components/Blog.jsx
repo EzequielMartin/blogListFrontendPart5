@@ -1,6 +1,6 @@
 import Toggleable from "./Toggleable"
 
-const Blog = ({ blog, increaseLikes }) => {
+const Blog = ({ blog, increaseLikes, removeBlog }) => {
   const blogStyle = {
     padding: 10,
     border: 'solid',
@@ -16,6 +16,7 @@ const Blog = ({ blog, increaseLikes }) => {
         <p>{blog.url}</p>
         <p>{blog.likes} <button onClick={increaseLikes}>Like</button></p>
         <p>{blog.author}</p>
+        <p><button onClick={removeBlog}>Remove</button></p>
       </Toggleable>
     </div>  
   )
