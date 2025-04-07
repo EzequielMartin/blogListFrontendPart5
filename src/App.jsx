@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from "./services/login"
+import LoginForm from './components/LoginForm'
 
 const Notification = (props) => {
   if (props.error === null && props.success === null) {
@@ -28,6 +29,7 @@ const App = () => {
   const [url, setURL] = useState("")
   const [errorMessage, setErrorMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
+  const [loginVisible, setLoginVisible] = useState(false)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -70,24 +72,32 @@ const App = () => {
     }
   }
 
-  const loginForm = () => (
-    <div>
-      <h1>Login</h1>
-      <form onSubmit={handleLogin}>
-        <div>
-          username <input type="text" value={username} name="Username" onChange={({ target }) => setUsername(target.value)}/>
+  const loginForm = () => {
+    const hideWhenVisible = { display: loginVisible ? 'none' : '' }
+    const showWhenVisible = { display: loginVisible ? '' : 'none' }
+
+    return (
+      <div>
+        <div style={hideWhenVisible}>
+          <button onClick={() => setLoginVisible(true)}>log in</button>
         </div>
-        <div>
-          password <input type="password" value={password} name="Password" onChange={({ target }) => setPassword(target.value)}/>
+        <div style={showWhenVisible}>
+          <LoginForm
+            username={username}
+            password={password}
+            handleUsernameChange={({ target }) => setUsername(target.value)}
+            handlePasswordChange={({ target }) => setPassword(target.value)}
+            handleSubmit={handleLogin}
+          />
+          <button onClick={() => setLoginVisible(false)}>cancel</button>
         </div>
-        <button type="submit">login</button>
-      </form>
-    </div>
-  )
+      </div>
+    )
+  }
 
   const blogDisplay = () => (
     <div>
-      <h2>blogs</h2>
+      <h2>Blogs</h2>
       <p>{user.name} logged-in</p>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
