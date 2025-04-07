@@ -3,6 +3,8 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from "./services/login"
 import LoginForm from './components/LoginForm'
+import BlogForm from './components/BlogForm'
+import Toggleable from './components/Toggleable'
 
 const Notification = (props) => {
   if (props.error === null && props.success === null) {
@@ -29,7 +31,6 @@ const App = () => {
   const [url, setURL] = useState("")
   const [errorMessage, setErrorMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
-  const [loginVisible, setLoginVisible] = useState(false)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -72,28 +73,18 @@ const App = () => {
     }
   }
 
-  const loginForm = () => {
-    const hideWhenVisible = { display: loginVisible ? 'none' : '' }
-    const showWhenVisible = { display: loginVisible ? '' : 'none' }
-
-    return (
-      <div>
-        <div style={hideWhenVisible}>
-          <button onClick={() => setLoginVisible(true)}>log in</button>
-        </div>
-        <div style={showWhenVisible}>
-          <LoginForm
-            username={username}
-            password={password}
-            handleUsernameChange={({ target }) => setUsername(target.value)}
-            handlePasswordChange={({ target }) => setPassword(target.value)}
-            handleSubmit={handleLogin}
-          />
-          <button onClick={() => setLoginVisible(false)}>cancel</button>
-        </div>
-      </div>
-    )
-  }
+  //Notar que en esta funcion y en blogForm, como solo defino el html a retornar, no tengo que usar return() y no pongo {} despues de la funcion flecha sino ()
+  const loginForm = () => (
+    <Toggleable buttonLabel="Login">
+      <LoginForm
+        username={username}
+        password={password}
+        handleUsernameChange={({ target }) => setUsername(target.value)}
+        handlePasswordChange={({ target }) => setPassword(target.value)}
+        handleSubmit={handleLogin}
+      />
+    </Toggleable>
+  )
 
   const blogDisplay = () => (
     <div>
@@ -106,15 +97,17 @@ const App = () => {
   )
 
   const blogForm = () => (
-    <div>
-      <h2>Add blog</h2>
-      <form onSubmit={addBlog}>
-        <p>Title: <input type={"text"} value={title} name={"Title"} onChange={({ target }) => setTitle(target.value)} /></p>
-        <p>Author: <input type={"text"} value={author} name={"Author"} onChange={({ target }) => setAuthor(target.value)} /></p>
-        <p>URL: <input type={"text"} value={url} name={"URL"} onChange={({ target }) => setURL(target.value)} /></p>
-        <button type='submit'>Create</button>
-      </form>
-    </div>
+    <Toggleable buttonLabel="New blog">
+      <BlogForm
+        onSubmit={addBlog}
+        title={title}
+        author={author}
+        url={url}
+        handleTitleChange={({ target }) => setTitle(target.value)}
+        handleAuthorChange={({ target }) => setAuthor(target.value)}
+        handleURLChange={({ target }) => setURL(target.value)}
+      />
+    </Toggleable>
   )
 
   const addBlog = (event) => {
