@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import Blog from "./Blog"
+import { expect } from "vitest"
 
 test("Titulo visible y lo demas oculto", () => {
   const blog = {
@@ -32,8 +33,6 @@ test("Clickeando el boton View muestro el contenido del Blog", async () => {
     likes: 5,
   }
 
-  // const mockHandler = vi.fn()
-
   render(<Blog blog={blog}  />)
   screen.debug()
 
@@ -50,4 +49,28 @@ test("Clickeando el boton View muestro el contenido del Blog", async () => {
   expect.soft(element).toBeVisible()
   element = screen.getByText("5")
   expect.soft(element).toBeVisible()
+})
+
+test("Clickeando dos veces el boton de likes se hace dos veces la llamada a la funcion de incrementar likes", async () => {
+  const blog = {
+    title: "Probando test de render title y lo demas oculto",
+    author: "Eze",
+    url: "test.com/render",
+    likes: 5,
+  }
+
+  const mockHandler = vi.fn()
+
+  render(<Blog blog={blog} increaseLikes={mockHandler} />)
+  screen.debug()
+
+  const user = userEvent.setup()
+  let button = screen.getByText("View")
+  await user.click(button)
+  button = screen.getByText("Like")
+  await user.click(button)
+  await user.click(button)
+  screen.debug()
+
+  expect(mockHandler.mock.calls).toHaveLength(2)
 })
