@@ -88,7 +88,7 @@ const App = () => {
       <h2>Blogs</h2>
       <p>{user.name} logged-in</p>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} increaseLikes={() => increaseLikes(blog.id)} />
       )}
     </div>
   )
@@ -111,6 +111,18 @@ const App = () => {
           }, 5000)
         })
       
+  }
+
+  const increaseLikes = id => {
+    const blog = blogs.find(b => b.id === id)
+    const updatedLikes = blog.likes + 1
+    const updatedBlog = {...blog, likes: updatedLikes}
+    
+    blogService
+      .update(id, updatedBlog)
+      .then(returnedBlog => {
+      setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog))
+    })
   }
 
   return (
