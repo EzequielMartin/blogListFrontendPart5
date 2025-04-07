@@ -12,7 +12,6 @@ test("Titulo visible y lo demas oculto", () => {
   }
 
   render(<Blog blog={blog} />)
-  screen.debug()
 
   let element = screen.getByText("Probando test de render title y lo demas oculto")
   expect.soft(element).toBeVisible()
@@ -34,12 +33,10 @@ test("Clickeando el boton View muestro el contenido del Blog", async () => {
   }
 
   render(<Blog blog={blog}  />)
-  screen.debug()
 
   const user = userEvent.setup()
   const button = screen.getByText("View")
   await user.click(button)
-  screen.debug()
 
   let element = screen.getByText("Probando test de render title y lo demas oculto")
   expect.soft(element).toBeVisible()
@@ -62,7 +59,6 @@ test("Clickeando dos veces el boton de likes se hace dos veces la llamada a la f
   const mockHandler = vi.fn()
 
   render(<Blog blog={blog} increaseLikes={mockHandler} />)
-  screen.debug()
 
   const user = userEvent.setup()
   let button = screen.getByText("View")
@@ -70,7 +66,6 @@ test("Clickeando dos veces el boton de likes se hace dos veces la llamada a la f
   button = screen.getByText("Like")
   await user.click(button)
   await user.click(button)
-  screen.debug()
 
   expect(mockHandler.mock.calls).toHaveLength(2)
 })
