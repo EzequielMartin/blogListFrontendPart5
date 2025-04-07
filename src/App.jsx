@@ -5,6 +5,7 @@ import loginService from "./services/login"
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Toggleable from './components/Toggleable'
+import usersService from "./services/users"
 
 const Notification = (props) => {
   if (props.error === null && props.success === null) {
@@ -18,7 +19,6 @@ const Notification = (props) => {
       <div>{props.success}</div>
     )
   }
-  // return(<p>HOLA</p>)
 }
 
 const App = () => {
@@ -28,11 +28,18 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
+  const [users, setUsers] = useState([])
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
+  }, [])
+
+  useEffect(() => {
+    usersService.getAll().then(users => {
+      setUsers(users)
+    }) 
   }, [])
 
   useEffect(() => {

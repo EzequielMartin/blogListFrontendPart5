@@ -1,4 +1,5 @@
 import Toggleable from "./Toggleable"
+import { useState } from "react"
 
 const Blog = ({ blog, increaseLikes, removeBlog }) => {
   const blogStyle = {
@@ -8,6 +9,14 @@ const Blog = ({ blog, increaseLikes, removeBlog }) => {
     marginBottom: 5,
     width: 300
   }
+  
+  //const [visible, setVisible] = useState("none")
+
+  // if (userId === blog.user) {
+  //   setVisible("")
+  // }else{
+  //   setVisible("none")
+  // }
 
   return(
     <div style={blogStyle}>
@@ -16,7 +25,7 @@ const Blog = ({ blog, increaseLikes, removeBlog }) => {
         <p>{blog.url}</p>
         <p>{blog.likes} <button onClick={increaseLikes}>Like</button></p>
         <p>{blog.author}</p>
-        <p><button onClick={removeBlog}>Remove</button></p>
+        <p><button onClick={removeBlog}>Remove</button></p>  
       </Toggleable>
     </div>  
   )
